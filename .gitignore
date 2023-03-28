@@ -11,3 +11,5 @@ cb/!**/src/test/**/build/
 cb/.vscode/
 
 cb/src/main/resources/application.yaml
+cb/bin/main/application.yaml
+
