@@ -14,6 +14,11 @@ public class UserService {
   @Autowired
   private UserRepo userRepo;
 
+  public boolean isUserRegisted(String id, String provider) {
+    Optional<User> user = userRepo.findByIdAndProvider(id, provider);
+    return user.isPresent();
+  }
+
   /**
    * 로그인 한 유저의 정보를 DB에 조회해서 새로운 유저라면 유저 정보를 저장
    * @param userRequest 받아온 유저 데터
