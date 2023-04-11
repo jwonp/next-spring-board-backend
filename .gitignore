@@ -11,6 +11,5 @@ cb/!**/src/test/**/build/
 cb/.vscode/
 
 cb/src/main/resources/application.yaml
-cb/bin/main/application.yaml
-cb/bin/main/application 2.yaml
-cb/bin/main/com/ikiningyou/cb/
+cb/bin/
+deprecated/
