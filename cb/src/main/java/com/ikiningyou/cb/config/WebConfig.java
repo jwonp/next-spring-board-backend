@@ -36,7 +36,9 @@ public class WebConfig {
       // )
       .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
       .httpBasic(c -> c.disable())
-      .csrf(c -> c.csrfTokenRepository(customTokenRepository()))
+      .csrf(c -> {
+        c.csrfTokenRepository(customTokenRepository());
+      })
       .cors(c -> {
         CorsConfigurationSource source = request -> {
           CorsConfiguration config = new CorsConfiguration();
