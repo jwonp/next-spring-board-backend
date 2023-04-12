@@ -21,7 +21,7 @@ public class UserService {
 
   /**
    * 로그인 한 유저의 정보를 DB에 조회해서 새로운 유저라면 유저 정보를 저장
-   * @param userRequest 받아온 유저 데터
+   * @param userRequest 받아온 유저 데이터
    * @return 저장에 성공했으면 true, 이미 존재하는 유저였으면 false;
    */
   public boolean addUser(UserRequest userRequest) {
@@ -44,8 +44,10 @@ public class UserService {
       userRepo.save(user);
     } catch (IllegalArgumentException e) {
       e.getStackTrace();
+      return false;
     } catch (OptimisticLockingFailureException e) {
       e.getStackTrace();
+      return false;
     }
 
     return true;
