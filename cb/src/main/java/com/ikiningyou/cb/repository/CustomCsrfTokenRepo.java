@@ -59,6 +59,7 @@ public class CustomCsrfTokenRepo implements CsrfTokenRepository {
 
     if (existingToken.isPresent()) {
       Token token = existingToken.get();
+      log.info(" IDer is {} ", identifier);
       return new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", token.getToken());
     }
     return null;

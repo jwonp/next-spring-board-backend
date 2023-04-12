@@ -22,7 +22,7 @@ public class CsrfTokenLogger implements Filter {
   ) throws IOException, ServletException {
     Object o = request.getAttribute("_csrf");
     CsrfToken token = (CsrfToken) o;
-    log.info("CSRF token : {}", token.getToken());
+    log.info("CsrfTokenLogger CSRF token : {}", token.getToken());
     chain.doFilter(request, response);
     // throw new UnsupportedOperationException("Unimplemented method 'doFilter'");
   }
