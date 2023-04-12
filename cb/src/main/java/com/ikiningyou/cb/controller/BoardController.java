@@ -1,7 +1,9 @@
 package com.ikiningyou.cb.controller;
 
 import com.ikiningyou.cb.model.dto.ContentRequest;
+import com.ikiningyou.cb.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class BoardController {
 
+  @Autowired
+  private BoardService boardService;
+
   @GetMapping("/search")
   public ResponseEntity<?> searchBytarget(
     @RequestParam("target") String target
@@ -24,8 +29,10 @@ public class BoardController {
   }
 
   @PostMapping("/edit")
-  public ResponseEntity<String> saveContent(@RequestBody ContentRequest dto) {
-    log.info(" title: {}, content : {} ", dto.getTitle(), dto.getContent());
-    return ResponseEntity.ok().body("good");
+  public ResponseEntity<Boolean> saveContent(
+    @RequestBody ContentRequest content
+  ) {
+    Boolean isSaved = boardService.addContent(content);
+    return ResponseEntity.status(isSaved ? 200 : 400).body(isSaved);
   }
 }
