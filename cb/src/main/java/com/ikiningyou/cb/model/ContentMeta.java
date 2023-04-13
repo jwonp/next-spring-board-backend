@@ -17,22 +17,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Content {
+public class ContentMeta {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String title;
-  private String content;
-  private String writer;
+  private int views;
+  private int likes;
+  private String author;
   private String board;
-
-  @Column(name = "created")
   private Date created;
-
-  @PrePersist
-  void created() {
-    this.created = new Date();
-  }
+  private Date updated;
 }
