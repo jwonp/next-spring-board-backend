@@ -38,8 +38,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation group: 'org.springframework.security', name:'spring-security-test'
+	testImplementation 'junit:junit:4.13.2'
+
 }
 
-tasks.named('test') {
+// tasks.named('test') {
+// 	useJUnitPlatform()
+// }
+
+test {
 	useJUnitPlatform()
 }
