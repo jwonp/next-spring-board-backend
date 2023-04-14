@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Builder
 @Entity
@@ -24,10 +25,24 @@ public class ContentMeta {
   private Long id;
 
   private String title;
-  private int views;
-  private int likes;
   private String author;
   private String board;
+
+  @Column(name = "created")
   private Date created;
+
+  @Column(name = "updated")
   private Date updated;
+
+  @PrePersist
+  void getDate() {
+    this.created = new Date();
+    this.updated = new Date();
+  }
+
+  @ColumnDefault("0")
+  private int views;
+
+  @ColumnDefault("0")
+  private int likes;
 }
