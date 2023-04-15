@@ -13,3 +13,6 @@ cb/.vscode/
 cb/src/main/resources/application.yaml
 cb/bin/
 deprecated/
+cb/bin/main/com/ikiningyou/cb/
+
+.vscode/
