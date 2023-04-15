@@ -3,12 +3,16 @@ package com.ikiningyou.cb.controller;
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.dto.ContentListResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
+import com.ikiningyou.cb.model.dto.SearchResponse;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.MergedAnnotations.Search;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,14 +41,17 @@ public class BoardController {
     @RequestParam("index") int index
   ) {
     log.info("board {} index {}", board, index);
+
+    Pageable pageable = PageRequest.of(index, 10);
     Optional<List<ContentMeta>> contentMetaList = boardService.getContentListByBoard(
-      board
+      board,
+      pageable
     );
     log.info("is empty ? {}", contentMetaList.get().isEmpty());
     if (contentMetaList.isEmpty()) {
       return ResponseEntity.status(201).body(null);
     }
-    log.info("{}", contentMetaList.get().get(0).getTitle());
+
     return ResponseEntity
       .ok()
       .body(
@@ -54,12 +61,27 @@ public class BoardController {
       );
   }
 
-  @GetMapping("/search")
-  public ResponseEntity<?> searchBytarget(
-    @RequestParam("target") String target
+  @GetMapping("/size")
+  public ResponseEntity<Integer> getSizeByBoard(
+    @RequestParam("board") String board
   ) {
-    log.info("target is {}", target);
-    return ResponseEntity.status(200).body(target);
+    if (boardNameMap.isBoardName(board) == false) {
+      return ResponseEntity.status(201).body(-1);
+    }
+    Long size = boardService.getSizeByBoard(board);
+    int intSize = Long.valueOf(Optional.ofNullable(size).orElse(0L)).intValue();
+    return ResponseEntity.status(200).body(intSize);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<SearchResponse[]> searchByBoard(
+    @RequestParam("search") String search,
+    @RequestParam("board") String board
+  ) {
+    List<SearchResponse> resultList = boardService.searchByBoard(board, search);
+    return ResponseEntity
+      .status(200)
+      .body(resultList.toArray(new SearchResponse[resultList.size()]));
   }
 
   @PostMapping("/edit")

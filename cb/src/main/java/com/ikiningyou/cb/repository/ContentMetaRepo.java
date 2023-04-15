@@ -10,5 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContentMetaRepo extends JpaRepository<ContentMeta, Long> {
   Optional<List<ContentMeta>> findByBoard(String board, Pageable pageable);
-  Optional<List<ContentMeta>> findByBoard(String board);
+  Optional<List<ContentMeta>> findByBoardAndTitleContaining(
+    String board,
+    String title
+  );
+  Long countByBoard(String board);
 }
