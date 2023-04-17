@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// @Slf4j
 @RestController
 @RequestMapping("/board")
-@Slf4j
 public class BoardController {
 
   @Autowired
@@ -40,14 +40,11 @@ public class BoardController {
     @RequestParam("board") String board,
     @RequestParam("index") int index
   ) {
-    log.info("board {} index {}", board, index);
-
-    Pageable pageable = PageRequest.of(index, 10);
     Optional<List<ContentMeta>> contentMetaList = boardService.getContentListByBoard(
       board,
-      pageable
+      index
     );
-    log.info("is empty ? {}", contentMetaList.get().isEmpty());
+
     if (contentMetaList.isEmpty()) {
       return ResponseEntity.status(201).body(null);
     }
@@ -63,25 +60,30 @@ public class BoardController {
 
   @GetMapping("/size")
   public ResponseEntity<Integer> getSizeByBoard(
-    @RequestParam("board") String board
+    @RequestParam("board") String board,
+    @RequestParam(required = false, value = "search") String search
   ) {
     if (boardNameMap.isBoardName(board) == false) {
       return ResponseEntity.status(201).body(-1);
     }
-    Long size = boardService.getSizeByBoard(board);
+    Long size = boardService.getSizeByBoard(board, search);
     int intSize = Long.valueOf(Optional.ofNullable(size).orElse(0L)).intValue();
+
     return ResponseEntity.status(200).body(intSize);
   }
 
   @GetMapping("/search")
-  public ResponseEntity<SearchResponse[]> searchByBoard(
+  public ResponseEntity<ContentMeta[]> searchByQueryAndBoard(
     @RequestParam("search") String search,
     @RequestParam("board") String board
   ) {
-    List<SearchResponse> resultList = boardService.searchByBoard(board, search);
+    List<ContentMeta> resultList = boardService.searchByQueryAndBoard(
+      board,
+      search
+    );
     return ResponseEntity
       .status(200)
-      .body(resultList.toArray(new SearchResponse[resultList.size()]));
+      .body(resultList.toArray(new ContentMeta[resultList.size()]));
   }
 
   @PostMapping("/edit")

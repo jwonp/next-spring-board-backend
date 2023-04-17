@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.MergedAnnotations.Search;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,9 @@ public class BoardService {
 
   public Optional<List<ContentMeta>> getContentListByBoard(
     String board,
-    Pageable pageable
+    int index
   ) {
+    Pageable pageable = PageRequest.of(index, 10);
     Optional<List<ContentMeta>> contentMetaList = contentMetaRepo.findByBoard(
       board,
       pageable
@@ -62,31 +64,27 @@ public class BoardService {
     return true;
   }
 
-  public Long getSizeByBoard(String board) {
-    Long size = contentMetaRepo.countByBoard(board);
+  public Long getSizeByBoard(String board, String search) {
+    Long size = 0l;
+    if (search == null) {
+      size = contentMetaRepo.countByBoard(board);
+    } else {
+      size = contentMetaRepo.countByBoardAndTitleContaining(board, search);
+    }
+
     return size;
   }
 
-  public List<SearchResponse> searchByBoard(String board, String search) {
+  public List<ContentMeta> searchByQueryAndBoard(String board, String search) {
+    Pageable pageable = PageRequest.of(0, 10);
     Optional<List<ContentMeta>> searchResult = contentMetaRepo.findByBoardAndTitleContaining(
       board,
-      search
+      search,
+      pageable
     );
-    List<ContentMeta> searchList;
-    List<SearchResponse> responseList = new ArrayList<SearchResponse>();
-    if (searchResult.isPresent()) {
-      searchList = searchResult.get();
-      searchList.forEach(item ->
-        responseList.add(
-          SearchResponse
-            .builder()
-            .id(item.getId())
-            .title(item.getTitle())
-            .build()
-        )
-      );
 
-      return responseList;
+    if (searchResult.isPresent()) {
+      return searchResult.get();
     }
     return null;
   }
