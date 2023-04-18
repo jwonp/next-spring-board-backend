@@ -2,8 +2,8 @@ package com.ikiningyou.cb.service;
 
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
+import com.ikiningyou.cb.model.dto.ContentFullData;
 import com.ikiningyou.cb.model.dto.ContentRequest;
-import com.ikiningyou.cb.model.dto.ContentWithMetaResponse;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
 import java.util.List;
@@ -87,13 +87,16 @@ public class BoardService {
     return null;
   }
 
-  public ContentWithMetaResponse getContentByIdAndBoard(String board, Long id) {
-    Optional<Object> content = contentRepo.getContentWithContentMeta(id, board);
+  public ContentFullData getContentByIdAndBoard(String board, Long id) {
+    Optional<ContentFullData> content = contentRepo.getContentWithContentMeta(
+      id,
+      board
+    );
 
     if (content.isPresent() == false) {
       return null;
     }
 
-    return ContentWithMetaResponse.class.cast(content.get());
+    return content.get();
   }
 }

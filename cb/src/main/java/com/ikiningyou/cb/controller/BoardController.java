@@ -1,8 +1,9 @@
 package com.ikiningyou.cb.controller;
 
+import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
+import com.ikiningyou.cb.model.dto.ContentFullData;
 import com.ikiningyou.cb.model.dto.ContentRequest;
-import com.ikiningyou.cb.model.dto.ContentWithMetaResponse;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
 import java.util.List;
@@ -100,14 +101,11 @@ public class BoardController {
   }
 
   @GetMapping("/content")
-  public ResponseEntity<ContentWithMetaResponse> getContentByContentIdAndBoard(
+  public ResponseEntity<ContentFullData> getContentByContentIdAndBoard(
     @RequestParam("board") String board,
     @RequestParam("id") Long id
   ) {
-    ContentWithMetaResponse content = boardService.getContentByIdAndBoard(
-      board,
-      id
-    );
+    ContentFullData content = boardService.getContentByIdAndBoard(board, id);
     if (content == null) {
       return ResponseEntity.status(201).body(null);
     }
