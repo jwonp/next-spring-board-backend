@@ -102,10 +102,9 @@ public class BoardController {
 
   @GetMapping("/content")
   public ResponseEntity<ContentFullData> getContentByContentIdAndBoard(
-    @RequestParam("board") String board,
     @RequestParam("id") Long id
   ) {
-    ContentFullData content = boardService.getContentByIdAndBoard(board, id);
+    ContentFullData content = boardService.getContentById(id);
     if (content == null) {
       return ResponseEntity.status(201).body(null);
     }
