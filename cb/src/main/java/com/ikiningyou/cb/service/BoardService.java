@@ -8,12 +8,14 @@ import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class BoardService {
 
@@ -87,10 +89,9 @@ public class BoardService {
     return null;
   }
 
-  public ContentFullData getContentByIdAndBoard(String board, Long id) {
+  public ContentFullData getContentById(Long id) {
     Optional<ContentFullData> content = contentRepo.getContentWithContentMeta(
-      id,
-      board
+      id
     );
 
     if (content.isPresent() == false) {
