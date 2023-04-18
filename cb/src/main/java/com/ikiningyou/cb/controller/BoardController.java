@@ -101,7 +101,7 @@ public class BoardController {
   }
 
   @GetMapping("/content")
-  public ResponseEntity<ContentFullData> getContentByContentIdAndBoard(
+  public ResponseEntity<ContentFullData> getContentByContentId(
     @RequestParam("id") Long id
   ) {
     ContentFullData content = boardService.getContentById(id);
