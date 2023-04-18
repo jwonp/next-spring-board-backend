@@ -3,14 +3,12 @@ package com.ikiningyou.cb.service;
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.dto.ContentRequest;
-import com.ikiningyou.cb.model.dto.SearchResponse;
+import com.ikiningyou.cb.model.dto.ContentWithMetaResponse;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.MergedAnnotations.Search;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,5 +85,15 @@ public class BoardService {
       return searchResult.get();
     }
     return null;
+  }
+
+  public ContentWithMetaResponse getContentByIdAndBoard(String board, Long id) {
+    Optional<Object> content = contentRepo.getContentWithContentMeta(id, board);
+
+    if (content.isPresent() == false) {
+      return null;
+    }
+
+    return ContentWithMetaResponse.class.cast(content.get());
   }
 }

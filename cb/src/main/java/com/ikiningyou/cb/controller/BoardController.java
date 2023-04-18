@@ -1,18 +1,14 @@
 package com.ikiningyou.cb.controller;
 
 import com.ikiningyou.cb.model.ContentMeta;
-import com.ikiningyou.cb.model.dto.ContentListResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
-import com.ikiningyou.cb.model.dto.SearchResponse;
+import com.ikiningyou.cb.model.dto.ContentWithMetaResponse;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.MergedAnnotations.Search;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,5 +97,20 @@ public class BoardController {
     isSuccessd = isSaved && isBoardNameCorrect;
 
     return ResponseEntity.status(isSuccessd ? 200 : 400).body(isSuccessd);
+  }
+
+  @GetMapping("/content")
+  public ResponseEntity<ContentWithMetaResponse> getContentByContentIdAndBoard(
+    @RequestParam("board") String board,
+    @RequestParam("id") Long id
+  ) {
+    ContentWithMetaResponse content = boardService.getContentByIdAndBoard(
+      board,
+      id
+    );
+    if (content == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.ok().body(content);
   }
 }

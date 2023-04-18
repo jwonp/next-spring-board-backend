@@ -22,7 +22,8 @@ public class ContentMeta {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "content_meta_id")
+  private Long content_meta_id;
 
   private String title;
   private String author;
