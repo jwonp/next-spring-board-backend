@@ -1,7 +1,8 @@
 package com.ikiningyou.cb.controller;
 
-import com.ikiningyou.cb.model.Content;
+import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.ContentMeta;
+import com.ikiningyou.cb.model.dto.CommentRequest;
 import com.ikiningyou.cb.model.dto.ContentFullData;
 import com.ikiningyou.cb.model.dto.ContentRequest;
 import com.ikiningyou.cb.service.BoardService;
@@ -109,5 +110,35 @@ public class BoardController {
       return ResponseEntity.status(201).body(null);
     }
     return ResponseEntity.ok().body(content);
+  }
+
+  @GetMapping("/comment")
+  public ResponseEntity<Comment[]> getCommentByContentId(
+    @RequestParam("id") Long id
+  ) {
+    Comment[] commentList = boardService.getCommnetByContentId(id);
+    if (commentList == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.ok().body(commentList);
+  }
+
+  @PostMapping("/comment")
+  public ResponseEntity<Boolean> addCommentByContentId(
+    @RequestBody CommentRequest comment
+  ) {
+    boolean isSaved = boardService.addCommentByContentId(comment);
+    return ResponseEntity.status(isSaved ? 200 : 201).body(isSaved);
+  }
+
+  @GetMapping("/comment/amount")
+  public ResponseEntity<Integer> getCommentAmountByContentId(
+    @RequestParam("id") Long id
+  ) {
+    Long amount = boardService.getCommentAmountByContentId(id);
+    int intSize = Long
+      .valueOf(Optional.ofNullable(amount).orElse(0L))
+      .intValue();
+    return ResponseEntity.ok().body(intSize);
   }
 }

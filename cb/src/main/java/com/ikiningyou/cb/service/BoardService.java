@@ -1,9 +1,12 @@
 package com.ikiningyou.cb.service;
 
+import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
+import com.ikiningyou.cb.model.dto.CommentRequest;
 import com.ikiningyou.cb.model.dto.ContentFullData;
 import com.ikiningyou.cb.model.dto.ContentRequest;
+import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
 import java.util.List;
@@ -24,6 +27,9 @@ public class BoardService {
 
   @Autowired
   private ContentMetaRepo contentMetaRepo;
+
+  @Autowired
+  private CommentRepo commentRepo;
 
   public Optional<List<ContentMeta>> getContentListByBoard(
     String board,
@@ -99,5 +105,40 @@ public class BoardService {
     }
 
     return content.get();
+  }
+
+  public Comment[] getCommnetByContentId(Long id) {
+    Optional<List<Comment>> rowCommentList = commentRepo.findByContent(id);
+    if (rowCommentList.isPresent() == false) {
+      return null;
+    }
+    return rowCommentList
+      .get()
+      .toArray(new Comment[rowCommentList.get().size()]);
+  }
+
+  public boolean addCommentByContentId(CommentRequest commentRequest) {
+    Comment comment = Comment
+      .builder()
+      .content(commentRequest.getContentId())
+      .comment(commentRequest.getComment())
+      .writer(commentRequest.getWriter())
+      .build();
+
+    try {
+      commentRepo.save(comment);
+    } catch (IllegalArgumentException e) {
+      e.getStackTrace();
+      return false;
+    } catch (OptimisticLockingFailureException e) {
+      e.getStackTrace();
+      return false;
+    }
+    return true;
+  }
+
+  public Long getCommentAmountByContentId(Long id) {
+    Long amount = commentRepo.countByContent(id);
+    return amount;
   }
 }
