@@ -3,7 +3,9 @@ package com.ikiningyou.cb.controller;
 import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.dto.CommentRequest;
+import com.ikiningyou.cb.model.dto.CommentResponse;
 import com.ikiningyou.cb.model.dto.ContentFullData;
+import com.ikiningyou.cb.model.dto.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
@@ -34,26 +36,20 @@ public class BoardController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ContentMeta[]> getContentListByBoard(
+  public ResponseEntity<ContentMetaResponse[]> getContentListByBoard(
     @RequestParam("board") String board,
     @RequestParam("index") int index
   ) {
-    Optional<List<ContentMeta>> contentMetaList = boardService.getContentListByBoard(
+    ContentMetaResponse[] contentMetaList = boardService.getContentListByBoard(
       board,
       index
     );
 
-    if (contentMetaList.isEmpty()) {
+    if (contentMetaList == null) {
       return ResponseEntity.status(201).body(null);
     }
 
-    return ResponseEntity
-      .ok()
-      .body(
-        contentMetaList
-          .get()
-          .toArray(new ContentMeta[contentMetaList.get().size()])
-      );
+    return ResponseEntity.ok().body(contentMetaList);
   }
 
   @GetMapping("/size")
@@ -71,17 +67,18 @@ public class BoardController {
   }
 
   @GetMapping("/search")
-  public ResponseEntity<ContentMeta[]> searchByQueryAndBoard(
+  public ResponseEntity<ContentMetaResponse[]> searchByQueryAndBoard(
     @RequestParam("search") String search,
     @RequestParam("board") String board
   ) {
-    List<ContentMeta> resultList = boardService.searchByQueryAndBoard(
+    ContentMetaResponse[] resultList = boardService.searchByQueryAndBoard(
       board,
       search
     );
-    return ResponseEntity
-      .status(200)
-      .body(resultList.toArray(new ContentMeta[resultList.size()]));
+    if (resultList == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.status(200).body(resultList);
   }
 
   @PostMapping("/edit")
@@ -113,10 +110,10 @@ public class BoardController {
   }
 
   @GetMapping("/comment")
-  public ResponseEntity<Comment[]> getCommentByContentId(
+  public ResponseEntity<CommentResponse[]> getCommentByContentId(
     @RequestParam("id") Long id
   ) {
-    Comment[] commentList = boardService.getCommnetByContentId(id);
+    CommentResponse[] commentList = boardService.getCommnetByContentId(id);
     if (commentList == null) {
       return ResponseEntity.status(201).body(null);
     }

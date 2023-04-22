@@ -4,7 +4,9 @@ import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.dto.CommentRequest;
+import com.ikiningyou.cb.model.dto.CommentResponse;
 import com.ikiningyou.cb.model.dto.ContentFullData;
+import com.ikiningyou.cb.model.dto.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
 import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
@@ -31,16 +33,19 @@ public class BoardService {
   @Autowired
   private CommentRepo commentRepo;
 
-  public Optional<List<ContentMeta>> getContentListByBoard(
-    String board,
-    int index
-  ) {
+  public ContentMetaResponse[] getContentListByBoard(String board, int index) {
     Pageable pageable = PageRequest.of(index, 10);
-    Optional<List<ContentMeta>> contentMetaList = contentMetaRepo.findByBoard(
+    Optional<List<ContentMetaResponse>> contentMetaList = contentMetaRepo.findByBoard(
       board,
       pageable
     );
-    return contentMetaList;
+    if (contentMetaList.isPresent()) {
+      return contentMetaList
+        .get()
+        .toArray(new ContentMetaResponse[contentMetaList.get().size()]);
+    }
+
+    return null;
   }
 
   public Boolean addContent(ContentRequest contentRequest) {
@@ -81,16 +86,21 @@ public class BoardService {
     return size;
   }
 
-  public List<ContentMeta> searchByQueryAndBoard(String board, String search) {
+  public ContentMetaResponse[] searchByQueryAndBoard(
+    String board,
+    String search
+  ) {
     Pageable pageable = PageRequest.of(0, 10);
-    Optional<List<ContentMeta>> searchResult = contentMetaRepo.findByBoardAndTitleContaining(
+    Optional<List<ContentMetaResponse>> searchResult = contentMetaRepo.findByBoardAndTitleContaining(
       board,
       search,
       pageable
     );
 
     if (searchResult.isPresent()) {
-      return searchResult.get();
+      return searchResult
+        .get()
+        .toArray(new ContentMetaResponse[searchResult.get().size()]);
     }
     return null;
   }
@@ -107,14 +117,16 @@ public class BoardService {
     return content.get();
   }
 
-  public Comment[] getCommnetByContentId(Long id) {
-    Optional<List<Comment>> rowCommentList = commentRepo.findByContent(id);
+  public CommentResponse[] getCommnetByContentId(Long id) {
+    Optional<List<CommentResponse>> rowCommentList = commentRepo.getCommentByContent(
+      id
+    );
     if (rowCommentList.isPresent() == false) {
       return null;
     }
     return rowCommentList
       .get()
-      .toArray(new Comment[rowCommentList.get().size()]);
+      .toArray(new CommentResponse[rowCommentList.get().size()]);
   }
 
   public boolean addCommentByContentId(CommentRequest commentRequest) {

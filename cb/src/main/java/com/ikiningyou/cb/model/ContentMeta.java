@@ -2,9 +2,12 @@ package com.ikiningyou.cb.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -26,7 +29,10 @@ public class ContentMeta {
   private Long content_meta_id;
 
   private String title;
+
+  @Column(insertable = false, updatable = false)
   private String author;
+
   private String board;
 
   @Column(name = "created")
@@ -46,4 +52,8 @@ public class ContentMeta {
 
   @ColumnDefault("0")
   private int likes;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author")
+  private User user;
 }

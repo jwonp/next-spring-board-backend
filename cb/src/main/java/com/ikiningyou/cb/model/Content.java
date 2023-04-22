@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +28,22 @@ public class Content {
 
   private String title;
   private String content;
+
+  @Column(insertable = false, updatable = false)
   private String writer;
+
   private String board;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinTable(
-    name = "CONTENT_WITH_DATES",
-    joinColumns = @JoinColumn(name = "content_id"),
-    inverseJoinColumns = @JoinColumn(name = "content_meta_id")
-  )
+  // @JoinTable(
+  //   name = "CONTENT_WITH_DATES",
+  //   joinColumns = @JoinColumn(name = "content_id"),
+  //   inverseJoinColumns = @JoinColumn(name = "content_meta_id")
+  // )
+  @JoinColumn(name = "content_id")
   private ContentMeta contentMeta;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writer")
+  private User user;
 }
