@@ -19,6 +19,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -105,7 +106,15 @@ public class BoardService {
     return null;
   }
 
+  @Transactional
   public ContentFullData getContentById(Long id) {
+    Optional<ContentMeta> meta = contentMetaRepo.findById(id);
+    if (meta.isPresent()) {
+      ContentMeta _meta = meta.get();
+
+      _meta.setViews(_meta.getViews() + 1);
+    }
+
     Optional<ContentFullData> content = contentRepo.getContentWithContentMeta(
       id
     );
