@@ -1,7 +1,5 @@
 package com.ikiningyou.cb.controller;
 
-import com.ikiningyou.cb.model.Comment;
-import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.dto.CommentRequest;
 import com.ikiningyou.cb.model.dto.CommentResponse;
 import com.ikiningyou.cb.model.dto.ContentFullData;
@@ -9,7 +7,6 @@ import com.ikiningyou.cb.model.dto.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
-import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
