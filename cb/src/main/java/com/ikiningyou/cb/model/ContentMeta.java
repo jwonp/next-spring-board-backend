@@ -2,18 +2,16 @@ package com.ikiningyou.cb.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Builder
@@ -21,6 +19,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class ContentMeta {
 
   @Id
@@ -52,8 +51,4 @@ public class ContentMeta {
 
   @ColumnDefault("0")
   private int likes;
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "author")
-  private User user;
 }

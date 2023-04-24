@@ -29,21 +29,11 @@ public class Content {
   private String title;
   private String content;
 
-  @Column(insertable = false, updatable = false)
   private String writer;
 
   private String board;
 
   @OneToOne(fetch = FetchType.LAZY)
-  // @JoinTable(
-  //   name = "CONTENT_WITH_DATES",
-  //   joinColumns = @JoinColumn(name = "content_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "content_meta_id")
-  // )
   @JoinColumn(name = "content_id")
   private ContentMeta contentMeta;
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "writer")
-  private User user;
 }

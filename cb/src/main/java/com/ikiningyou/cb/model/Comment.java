@@ -45,8 +45,4 @@ public class Comment {
     this.created = new Date();
     this.updated = new Date();
   }
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "writer")
-  private User user;
 }
