@@ -13,7 +13,7 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
 
   @Query(
     "SELECT " +
-    "A.content_id as id, " +
+    "A.contentId as id, " +
     "A.title as title, " +
     "A.content as content, " +
     "A.board as board, " +
@@ -23,10 +23,10 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
     "B.updated as updated " +
     "FROM Content A " +
     "LEFT JOIN ContentMeta B " +
-    "ON A.content_id = B.content_meta_id " +
+    "ON A.contentId = B.contentMetaId " +
     "LEFT JOIN User C " +
     "ON A.writer = C.id " +
-    "where A.content_id = :id"
+    "where A.contentId = :id"
   )
   public Optional<ContentFullData> getContentWithContentMeta(
     @Param("id") Long id

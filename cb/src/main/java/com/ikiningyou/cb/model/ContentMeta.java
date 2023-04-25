@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,11 +26,10 @@ public class ContentMeta {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "content_meta_id")
-  private Long content_meta_id;
+  private Long contentMetaId;
 
   private String title;
 
-  @Column(insertable = false, updatable = false)
   private String author;
 
   private String board;

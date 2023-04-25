@@ -24,7 +24,7 @@ public class Content {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "content_id")
-  private Long content_id;
+  private Long contentId;
 
   private String title;
   private String content;

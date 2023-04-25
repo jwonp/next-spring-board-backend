@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ContentMetaRepo extends JpaRepository<ContentMeta, Long> {
+  // Optional<ContentMeta> findByContent_meta_id(Long content_meta_id);
+
   @Query(
     value = "SELECT " +
     "A.content_meta_id as contentMetaId, " +

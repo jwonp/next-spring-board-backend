@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CommentRepo extends JpaRepository<Comment, Long> {
   @Query(
-    "SELECT A.comment_id as commentId, " +
+    "SELECT A.commentId as commentId, " +
     "A.content as contentId, " +
     "A.comment as comment, " +
     "B.name as writer, " +
