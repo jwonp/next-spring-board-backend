@@ -1,10 +1,13 @@
 package com.ikiningyou.cb.controller;
 
+import com.ikiningyou.cb.model.Like;
 import com.ikiningyou.cb.model.dto.CommentRequest;
 import com.ikiningyou.cb.model.dto.CommentResponse;
 import com.ikiningyou.cb.model.dto.ContentFullData;
 import com.ikiningyou.cb.model.dto.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.ContentRequest;
+import com.ikiningyou.cb.model.dto.LikeRequest;
+import com.ikiningyou.cb.repository.LikeRepo;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
 import java.util.Optional;
@@ -12,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -129,10 +134,56 @@ public class BoardController {
   public ResponseEntity<Integer> getCommentAmountByContentId(
     @RequestParam("id") Long id
   ) {
-    Long amount = boardService.getCommentAmountByContentId(id);
-    int intSize = Long
-      .valueOf(Optional.ofNullable(amount).orElse(0L))
-      .intValue();
-    return ResponseEntity.ok().body(intSize);
+    int amount = boardService.getCommentAmountByContentId(id);
+
+    return ResponseEntity.ok().body(amount);
+  }
+
+  @PostMapping("/content/like")
+  public ResponseEntity<Boolean> addLikeByContentId(
+    @RequestBody LikeRequest likeRequest
+  ) {
+    boolean like = boardService.addLikeByContentId(
+      likeRequest.getContentId(),
+      likeRequest.getUser()
+    );
+    return ResponseEntity.ok().body(like);
+  }
+
+  @GetMapping("/content/like")
+  public ResponseEntity<Like[]> getLikeByContentOrUser(
+    @RequestParam(required = false, value = "content") Long contentId,
+    @RequestParam(required = false, value = "user") String userId
+  ) {
+    Like[] likeLlist = null;
+
+    if (contentId == null && userId == null) return ResponseEntity
+      .status(201)
+      .body(null);
+
+    //if exist contentId, userId
+    if (contentId != null && userId != null) {
+      likeLlist = boardService.getLikeByContentAndUser(contentId, userId);
+    }
+
+    //if exist only userId
+    if (contentId == null) {
+      likeLlist = boardService.getLikeByUser(userId);
+    }
+
+    //if exist only contentId
+    if (userId == null) {
+      likeLlist = boardService.getLikeByContent(contentId);
+    }
+
+    return ResponseEntity.ok().body(likeLlist);
+  }
+
+  @GetMapping("/content/like/amount")
+  public ResponseEntity<Integer> getLikeCountByContentId(
+    @RequestParam("content") Long contentId
+  ) {
+    int likeCount = boardService.getLikeCountByContentId(contentId);
+    return ResponseEntity.ok().body(likeCount);
   }
 }

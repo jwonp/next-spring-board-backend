@@ -3,6 +3,7 @@ package com.ikiningyou.cb.service;
 import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
+import com.ikiningyou.cb.model.Like;
 import com.ikiningyou.cb.model.dto.CommentRequest;
 import com.ikiningyou.cb.model.dto.CommentResponse;
 import com.ikiningyou.cb.model.dto.ContentFullData;
@@ -11,6 +12,7 @@ import com.ikiningyou.cb.model.dto.ContentRequest;
 import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
+import com.ikiningyou.cb.repository.LikeRepo;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,9 @@ public class BoardService {
 
   @Autowired
   private CommentRepo commentRepo;
+
+  @Autowired
+  private LikeRepo likeRepo;
 
   public ContentMetaResponse[] getContentListByBoard(String board, int index) {
     Pageable pageable = PageRequest.of(index, 10);
@@ -158,8 +163,74 @@ public class BoardService {
     return true;
   }
 
-  public Long getCommentAmountByContentId(Long id) {
+  public int getCommentAmountByContentId(Long id) {
     Long amount = commentRepo.countByContent(id);
-    return amount;
+    int intSize = Long
+      .valueOf(Optional.ofNullable(amount).orElse(0L))
+      .intValue();
+    return intSize;
+  }
+
+  public boolean addLikeByContentId(Long id, String user) {
+    Like like = Like.builder().contentId(id).userId(user).build();
+    Like[] rowExisted = getLikeByContentAndUser(id, user);
+    if (rowExisted.length > 0) {
+      return false;
+    }
+
+    try {
+      likeRepo.save(like);
+    } catch (IllegalArgumentException e) {
+      e.getStackTrace();
+      return false;
+    } catch (OptimisticLockingFailureException e) {
+      e.getStackTrace();
+      return false;
+    }
+    return true;
+  }
+
+  public Like[] getLikeByContent(Long content) {
+    Optional<List<Like>> rowLikeList = likeRepo.findByContentId(content);
+    if (rowLikeList.isPresent() == false) {
+      return null;
+    }
+    Like[] likeList = rowLikeList
+      .get()
+      .toArray(new Like[rowLikeList.get().size()]);
+    return likeList;
+  }
+
+  public Like[] getLikeByUser(String user) {
+    Optional<List<Like>> rowLikeList = likeRepo.findByUserId(user);
+    if (rowLikeList.isPresent() == false) {
+      return null;
+    }
+    Like[] likeList = rowLikeList
+      .get()
+      .toArray(new Like[rowLikeList.get().size()]);
+    return likeList;
+  }
+
+  public Like[] getLikeByContentAndUser(Long content, String user) {
+    Optional<List<Like>> rowLikeList = likeRepo.findByContentIdAndUserId(
+      content,
+      user
+    );
+    if (rowLikeList.isPresent() == false) {
+      return null;
+    }
+    Like[] likeList = rowLikeList
+      .get()
+      .toArray(new Like[rowLikeList.get().size()]);
+    return likeList;
+  }
+
+  public int getLikeCountByContentId(Long contentId) {
+    Long rowCount = likeRepo.countByContentId(contentId);
+    int intCount = Long
+      .valueOf(Optional.ofNullable(rowCount).orElse(0L))
+      .intValue();
+    return intCount;
   }
 }
