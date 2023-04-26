@@ -171,15 +171,23 @@ public class BoardService {
     return intSize;
   }
 
-  public boolean addLikeByContentId(Long id, String user) {
-    Like like = Like.builder().contentId(id).userId(user).build();
-    Like[] rowExisted = getLikeByContentAndUser(id, user);
+  @Transactional
+  public boolean addLikeByContentIdAndUser(Long contentId, String userId) {
+    Like like = Like.builder().contentId(contentId).userId(userId).build();
+    Like[] rowExisted = getLikeByContentAndUser(contentId, userId);
     if (rowExisted.length > 0) {
       return false;
     }
 
     try {
       likeRepo.save(like);
+      Optional<ContentMeta> rowContentMeta = contentMetaRepo.findByContentMetaId(
+        contentId
+      );
+      if (rowContentMeta.isPresent()) {
+        ContentMeta contentMeta = rowContentMeta.get();
+        contentMeta.setLikes(contentMeta.getLikes() + 1);
+      }
     } catch (IllegalArgumentException e) {
       e.getStackTrace();
       return false;
@@ -187,6 +195,28 @@ public class BoardService {
       e.getStackTrace();
       return false;
     }
+    return true;
+  }
+
+  @Transactional
+  public boolean deleteLikeByContentIdAndUser(Long contentId, String userId) {
+    try {
+      likeRepo.deleteByContentIdAndUserId(contentId, userId);
+      Optional<ContentMeta> rowContentMeta = contentMetaRepo.findByContentMetaId(
+        contentId
+      );
+      if (rowContentMeta.isPresent()) {
+        ContentMeta contentMeta = rowContentMeta.get();
+        contentMeta.setLikes(contentMeta.getLikes() - 1);
+      }
+    } catch (IllegalArgumentException e) {
+      e.getStackTrace();
+      return false;
+    } catch (OptimisticLockingFailureException e) {
+      e.getStackTrace();
+      return false;
+    }
+
     return true;
   }
 
@@ -232,5 +262,16 @@ public class BoardService {
       .valueOf(Optional.ofNullable(rowCount).orElse(0L))
       .intValue();
     return intCount;
+  }
+
+  public boolean isLikedByContentIdAndUser(Long contentId, String user) {
+    Long rowCount = likeRepo.countByContentIdAndUserId(contentId, user);
+    int intCount = Long
+      .valueOf(Optional.ofNullable(rowCount).orElse(0L))
+      .intValue();
+    if (intCount > 0) {
+      return true;
+    }
+    return false;
   }
 }

@@ -14,6 +14,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -140,14 +141,26 @@ public class BoardController {
   }
 
   @PostMapping("/content/like")
-  public ResponseEntity<Boolean> addLikeByContentId(
+  public ResponseEntity<Boolean> addLikeByContentIdAndUser(
     @RequestBody LikeRequest likeRequest
   ) {
-    boolean like = boardService.addLikeByContentId(
+    boolean like = boardService.addLikeByContentIdAndUser(
       likeRequest.getContentId(),
       likeRequest.getUser()
     );
     return ResponseEntity.ok().body(like);
+  }
+
+  @DeleteMapping("/content/like")
+  public ResponseEntity<Boolean> deleteLikeByContentId(
+    @RequestParam("content") Long contentId,
+    @RequestParam("user") String userId
+  ) {
+    boolean isDeleted = boardService.deleteLikeByContentIdAndUser(
+      contentId,
+      userId
+    );
+    return ResponseEntity.ok().body(isDeleted);
   }
 
   @GetMapping("/content/like")
@@ -185,5 +198,14 @@ public class BoardController {
   ) {
     int likeCount = boardService.getLikeCountByContentId(contentId);
     return ResponseEntity.ok().body(likeCount);
+  }
+
+  @GetMapping("/content/liked")
+  public ResponseEntity<Boolean> isLikedByContentIdAndUser(
+    @RequestParam("content") Long contentId,
+    @RequestParam("user") String userId
+  ) {
+    Boolean isLiked = boardService.isLikedByContentIdAndUser(contentId, userId);
+    return ResponseEntity.status(200).body(isLiked);
   }
 }
