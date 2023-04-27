@@ -112,6 +112,15 @@ public class BoardController {
     return ResponseEntity.ok().body(content);
   }
 
+  @DeleteMapping("/content")
+  public ResponseEntity<Boolean> deleteContent(
+    @RequestParam("content") Long contentId,
+    @RequestParam("user") String userId
+  ) {
+    boardService.deleteContent(contentId, userId);
+    return ResponseEntity.status(200).body(null);
+  }
+
   @GetMapping("/comment")
   public ResponseEntity<CommentResponse[]> getCommentByContentId(
     @RequestParam("id") Long id
@@ -207,5 +216,14 @@ public class BoardController {
   ) {
     Boolean isLiked = boardService.isLikedByContentIdAndUser(contentId, userId);
     return ResponseEntity.status(200).body(isLiked);
+  }
+
+  @GetMapping("/content/author")
+  public ResponseEntity<Boolean> isAuthorByContentId(
+    @RequestParam("content") Long contentId,
+    @RequestParam("author") String author
+  ) {
+    boolean isAuthor = boardService.isAuthorByContentId(contentId, author);
+    return ResponseEntity.status(200).body(isAuthor);
   }
 }

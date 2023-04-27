@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ContentRepo extends JpaRepository<Content, Long> {
-  Optional<Content> findByWriter(String writer);
+  Optional<Content> findByAuthor(String author);
   Optional<Content> findByBoard(String board);
+  Long countByContentIdAndAuthor(Long contentId, String author);
 
   @Query(
     "SELECT " +
@@ -25,10 +26,10 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
     "LEFT JOIN ContentMeta B " +
     "ON A.contentId = B.contentMetaId " +
     "LEFT JOIN User C " +
-    "ON A.writer = C.id " +
+    "ON A.author = C.id " +
     "where A.contentId = :id"
   )
-  public Optional<ContentFullData> getContentWithContentMeta(
-    @Param("id") Long id
-  );
+  Optional<ContentFullData> getContentWithContentMeta(@Param("id") Long id);
+
+  void deleteByContentId(Long contentId);
 }

@@ -59,14 +59,14 @@ public class BoardService {
       .builder()
       .title(contentRequest.getTitle())
       .content(contentRequest.getContent())
-      .writer(contentRequest.getWriter())
+      .author(contentRequest.getAuthor())
       .board(contentRequest.getBoard())
       .build();
     ContentMeta contentMeta = ContentMeta
       .builder()
       .board(contentRequest.getBoard())
       .title(contentRequest.getTitle())
-      .author(contentRequest.getWriter())
+      .author(contentRequest.getAuthor())
       .build();
     try {
       contentRepo.save(content);
@@ -132,7 +132,7 @@ public class BoardService {
   }
 
   public CommentResponse[] getCommnetByContentId(Long id) {
-    Optional<List<CommentResponse>> rowCommentList = commentRepo.getCommentByContent(
+    Optional<List<CommentResponse>> rowCommentList = commentRepo.getCommentByContentId(
       id
     );
     if (rowCommentList.isPresent() == false) {
@@ -146,7 +146,7 @@ public class BoardService {
   public boolean addCommentByContentId(CommentRequest commentRequest) {
     Comment comment = Comment
       .builder()
-      .content(commentRequest.getContentId())
+      .contentId(commentRequest.getContentId())
       .comment(commentRequest.getComment())
       .writer(commentRequest.getWriter())
       .build();
@@ -164,7 +164,7 @@ public class BoardService {
   }
 
   public int getCommentAmountByContentId(Long id) {
-    Long amount = commentRepo.countByContent(id);
+    Long amount = commentRepo.countByContentId(id);
     int intSize = Long
       .valueOf(Optional.ofNullable(amount).orElse(0L))
       .intValue();
@@ -273,5 +273,36 @@ public class BoardService {
       return true;
     }
     return false;
+  }
+
+  public boolean isAuthorByContentId(Long contentId, String author) {
+    Long rowContentCount = contentRepo.countByContentIdAndAuthor(
+      contentId,
+      author
+    );
+    int intCount = Long
+      .valueOf(Optional.ofNullable(rowContentCount).orElse(0L))
+      .intValue();
+    if (intCount > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  @Transactional
+  public boolean deleteContent(Long contentId, String userId) {
+    if (isAuthorByContentId(contentId, userId) == false) {
+      return false;
+    }
+    try {
+      contentRepo.deleteByContentId(contentId);
+      contentMetaRepo.deleteByContentMetaId(contentId);
+      commentRepo.deleteByContentId(contentId);
+      likeRepo.deleteByContentId(contentId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 }

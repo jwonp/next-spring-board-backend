@@ -24,7 +24,8 @@ public class Comment {
   @Column(name = "comment_id")
   private Long commentId;
 
-  private Long content;
+  @Column(name = "content_id")
+  private Long contentId;
 
   private String comment;
 

@@ -60,4 +60,6 @@ public interface ContentMetaRepo extends JpaRepository<ContentMeta, Long> {
 
   Long countByBoard(String board);
   Long countByBoardAndTitleContaining(String board, String title);
+
+  void deleteByContentMetaId(Long contentMetaId);
 }

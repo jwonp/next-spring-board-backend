@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface CommentRepo extends JpaRepository<Comment, Long> {
   @Query(
     "SELECT A.commentId as commentId, " +
-    "A.content as contentId, " +
+    "A.contentId as contentId, " +
     "A.comment as comment, " +
     "B.name as writer, " +
     "A.created as created, " +
@@ -19,11 +19,14 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
     "FROM Comment A " +
     "LEFT JOIN User B " +
     "ON A.writer = B.id " +
-    "WHERE A.content = :content"
+    "WHERE A.contentId = :contentId"
   )
-  Optional<List<CommentResponse>> getCommentByContent(
-    @Param("content") Long content
+  Optional<List<CommentResponse>> getCommentByContentId(
+    @Param("contentId") Long contentId
   );
 
-  Long countByContent(Long content);
+  Long countByContentId(Long content);
+
+  void deleteByContentId(Long contentId);
+  void deleteByCommentId(Long commentId);
 }
