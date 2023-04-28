@@ -4,11 +4,12 @@ import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.Content;
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.Like;
-import com.ikiningyou.cb.model.dto.CommentRequest;
-import com.ikiningyou.cb.model.dto.CommentResponse;
-import com.ikiningyou.cb.model.dto.ContentFullData;
-import com.ikiningyou.cb.model.dto.ContentMetaResponse;
-import com.ikiningyou.cb.model.dto.ContentRequest;
+import com.ikiningyou.cb.model.dto.content.ContentFullData;
+import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
+import com.ikiningyou.cb.model.dto.content.ContentRequest;
+import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
+import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
+import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
 import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
@@ -129,6 +130,16 @@ public class BoardService {
     }
 
     return content.get();
+  }
+
+  public ContentShortResponse getContentShortByContentId(Long contentId) {
+    Optional<ContentShortResponse> rowContentShort = contentRepo.findByContentId(
+      contentId
+    );
+    if (rowContentShort.isPresent() == false) {
+      return null;
+    }
+    return rowContentShort.get();
   }
 
   public CommentResponse[] getCommnetByContentId(Long id) {

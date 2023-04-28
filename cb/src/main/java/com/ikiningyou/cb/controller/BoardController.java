@@ -1,13 +1,13 @@
 package com.ikiningyou.cb.controller;
 
 import com.ikiningyou.cb.model.Like;
-import com.ikiningyou.cb.model.dto.CommentRequest;
-import com.ikiningyou.cb.model.dto.CommentResponse;
-import com.ikiningyou.cb.model.dto.ContentFullData;
-import com.ikiningyou.cb.model.dto.ContentMetaResponse;
-import com.ikiningyou.cb.model.dto.ContentRequest;
-import com.ikiningyou.cb.model.dto.LikeRequest;
-import com.ikiningyou.cb.repository.LikeRepo;
+import com.ikiningyou.cb.model.dto.content.ContentFullData;
+import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
+import com.ikiningyou.cb.model.dto.content.ContentRequest;
+import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
+import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
+import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
+import com.ikiningyou.cb.model.dto.content.like.LikeRequest;
 import com.ikiningyou.cb.service.BoardService;
 import com.ikiningyou.cb.util.BoardNameMap;
 import java.util.Optional;
@@ -110,6 +110,17 @@ public class BoardController {
       return ResponseEntity.status(201).body(null);
     }
     return ResponseEntity.ok().body(content);
+  }
+
+  @GetMapping("/content/short")
+  public ResponseEntity<ContentShortResponse> getContentShortByContentId(
+    @RequestParam("id") Long contentId
+  ) {
+    ContentShortResponse contentShort = boardService.getContentShortByContentId(
+      contentId
+    );
+    if (contentShort == null) return ResponseEntity.status(201).body(null);
+    return ResponseEntity.status(200).body(contentShort);
   }
 
   @DeleteMapping("/content")
