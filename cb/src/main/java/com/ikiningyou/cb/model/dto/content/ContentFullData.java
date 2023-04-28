@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model.dto;
+package com.ikiningyou.cb.model.dto.content;
 
 import java.util.Date;
 

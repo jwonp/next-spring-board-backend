@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model.dto;
+package com.ikiningyou.cb.model.dto.content;
 
 public interface ContentMetaResponse {
   public Long getContentMetaId();

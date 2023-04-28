@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model.dto;
+package com.ikiningyou.cb.model.dto.content.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class LikeRequest {
+public class CommentRequest {
 
   private Long contentId;
-  private String user;
+  private String comment;
+  private String writer;
 }

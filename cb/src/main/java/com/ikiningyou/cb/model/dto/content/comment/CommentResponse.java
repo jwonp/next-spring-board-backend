@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model.dto;
+package com.ikiningyou.cb.model.dto.content.comment;
 
 public interface CommentResponse {
   public Long getCommentId();

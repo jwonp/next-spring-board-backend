@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model.dto;
+package com.ikiningyou.cb.model.dto.content;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class SearchResponse {
+public class ContentRequest {
 
-  private Long id;
   private String title;
+  private String content;
+  private String author;
+  private String board;
 }
