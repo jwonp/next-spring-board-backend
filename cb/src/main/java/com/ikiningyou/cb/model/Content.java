@@ -7,12 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 @Builder
 @Entity
@@ -26,11 +26,16 @@ public class Content {
   @Column(name = "content_id")
   private Long contentId;
 
+  @Column(name = "title", nullable = false)
   private String title;
+
+  @Column(name = "content", nullable = false)
   private String content;
 
+  @Column(name = "author", nullable = false)
   private String author;
 
+  @Column(name = "board", nullable = false)
   private String board;
 
   @OneToOne(fetch = FetchType.LAZY)

@@ -27,16 +27,19 @@ public class ContentMeta {
   @Column(name = "content_meta_id")
   private Long contentMetaId;
 
+  @Column(name = "title", nullable = false)
   private String title;
 
+  @Column(name = "author", nullable = false)
   private String author;
 
+  @Column(name = "board", nullable = false)
   private String board;
 
-  @Column(name = "created")
+  @Column(name = "created", nullable = false)
   private Date created;
 
-  @Column(name = "updated")
+  @Column(name = "updated", nullable = false)
   private Date updated;
 
   @PrePersist

@@ -24,17 +24,19 @@ public class Comment {
   @Column(name = "comment_id")
   private Long commentId;
 
-  @Column(name = "content_id")
+  @Column(name = "content_id", nullable = false)
   private Long contentId;
 
+  @Column(name = "comment", nullable = false)
   private String comment;
 
+  @Column(name = "writer", nullable = false)
   private String writer;
 
-  @Column(name = "created")
+  @Column(name = "created", nullable = false)
   private Date created;
 
-  @Column(name = "updated")
+  @Column(name = "updated", nullable = false)
   private Date updated;
 
   @PrePersist
