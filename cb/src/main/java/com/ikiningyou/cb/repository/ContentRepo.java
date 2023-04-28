@@ -1,7 +1,8 @@
 package com.ikiningyou.cb.repository;
 
 import com.ikiningyou.cb.model.Content;
-import com.ikiningyou.cb.model.dto.ContentFullData;
+import com.ikiningyou.cb.model.dto.content.ContentFullData;
+import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,9 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
   Optional<Content> findByAuthor(String author);
   Optional<Content> findByBoard(String board);
   Long countByContentIdAndAuthor(Long contentId, String author);
+
+  // @Query("SELECT contentId, title, content FROM Content WHERE contentId = :id")
+  Optional<ContentShortResponse> findByContentId(Long contentId);
 
   @Query(
     "SELECT " +

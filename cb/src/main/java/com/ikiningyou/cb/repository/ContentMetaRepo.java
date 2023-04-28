@@ -1,7 +1,7 @@
 package com.ikiningyou.cb.repository;
 
 import com.ikiningyou.cb.model.ContentMeta;
-import com.ikiningyou.cb.model.dto.ContentMetaResponse;
+import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;

@@ -1,7 +1,7 @@
 package com.ikiningyou.cb.repository;
 
 import com.ikiningyou.cb.model.Comment;
-import com.ikiningyou.cb.model.dto.CommentResponse;
+import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
