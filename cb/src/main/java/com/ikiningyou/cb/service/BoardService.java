@@ -6,6 +6,7 @@ import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.Like;
 import com.ikiningyou.cb.model.dto.content.ContentFullData;
 import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
+import com.ikiningyou.cb.model.dto.content.ContentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.ContentRequest;
 import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
@@ -14,6 +15,7 @@ import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
 import com.ikiningyou.cb.repository.ContentRepo;
 import com.ikiningyou.cb.repository.LikeRepo;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +80,33 @@ public class BoardService {
     } catch (OptimisticLockingFailureException e) {
       e.getStackTrace();
       return false;
+    }
+    return true;
+  }
+
+  @Transactional
+  public boolean modifyContent(
+    Long contentId,
+    String title,
+    String contents,
+    String author
+  ) {
+    boolean isAuthor = isAuthorByContentId(contentId, author);
+    log.info("is author {}", isAuthor);
+    if (isAuthor == false) {
+      return false;
+    }
+    Optional<Content> rowContent = contentRepo.findById(contentId);
+    Optional<ContentMeta> rowContentMeta = contentMetaRepo.findById(contentId);
+    if (rowContent.isPresent()) {
+      Content content = rowContent.get();
+      content.setContent(contents);
+      content.setTitle(title);
+    }
+    if (rowContentMeta.isPresent()) {
+      ContentMeta contentMeta = rowContentMeta.get();
+      contentMeta.setTitle(title);
+      contentMeta.setUpdated(new Date());
     }
     return true;
   }

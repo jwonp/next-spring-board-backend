@@ -3,6 +3,7 @@ package com.ikiningyou.cb.controller;
 import com.ikiningyou.cb.model.Like;
 import com.ikiningyou.cb.model.dto.content.ContentFullData;
 import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
+import com.ikiningyou.cb.model.dto.content.ContentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.ContentRequest;
 import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
@@ -18,13 +19,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-// @Slf4j
+@Slf4j
 @RestController
 @RequestMapping("/board")
 public class BoardController {
@@ -99,6 +99,24 @@ public class BoardController {
     isSuccessd = isSaved && isBoardNameCorrect;
 
     return ResponseEntity.status(isSuccessd ? 200 : 400).body(isSuccessd);
+  }
+
+  @PatchMapping("/modify")
+  public ResponseEntity<Boolean> modifyContent(
+    @RequestBody ContentModifiedRequest contentModifiedRequest
+  ) {
+    Long contentId = contentModifiedRequest.getContentId();
+    String title = contentModifiedRequest.getTitle();
+    String contents = contentModifiedRequest.getContents();
+    String author = contentModifiedRequest.getAuthor();
+
+    boolean isModified = boardService.modifyContent(
+      contentId,
+      title,
+      contents,
+      author
+    );
+    return ResponseEntity.ok().body(isModified);
   }
 
   @GetMapping("/content")
