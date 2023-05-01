@@ -7,6 +7,8 @@ public interface CommentResponse {
 
   public String getComment();
 
+  public String getWriterId();
+
   public String getWriter();
 
   public String getCreated();

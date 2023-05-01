@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ContentListResponse {
 
-  private Long id;
+  private Long contentId;
   private String title;
   private int views;
   private int likes;

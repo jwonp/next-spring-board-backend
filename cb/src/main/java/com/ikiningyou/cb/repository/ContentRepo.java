@@ -18,10 +18,11 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
 
   @Query(
     "SELECT " +
-    "A.contentId as id, " +
+    "A.contentId as contentId, " +
     "A.title as title, " +
     "A.content as content, " +
     "A.board as board, " +
+    "A.author as authorId, " +
     "C.name as author, " +
     "B.views as views, " +
     "B.likes as likes, " +

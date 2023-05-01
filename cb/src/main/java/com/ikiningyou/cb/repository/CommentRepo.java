@@ -14,6 +14,7 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
     "A.contentId as contentId, " +
     "A.comment as comment, " +
     "B.name as writer, " +
+    "B.id as writerId, " +
     "A.created as created, " +
     "A.updated as updated " +
     "FROM Comment A " +
@@ -26,6 +27,7 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
   );
 
   Long countByContentId(Long content);
+  Long countByCommentIdAndWriter(Long commentId, String writer);
 
   void deleteByContentId(Long contentId);
   void deleteByCommentId(Long commentId);

@@ -6,6 +6,7 @@ import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.content.ContentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.ContentRequest;
 import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
+import com.ikiningyou.cb.model.dto.content.comment.CommentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
 import com.ikiningyou.cb.model.dto.content.like.LikeRequest;
@@ -167,6 +168,26 @@ public class BoardController {
   ) {
     boolean isSaved = boardService.addCommentByContentId(comment);
     return ResponseEntity.status(isSaved ? 200 : 201).body(isSaved);
+  }
+
+  @PatchMapping("/comment")
+  public ResponseEntity<Boolean> modifyComment(
+    @RequestBody CommentModifiedRequest commentModifiedRequest
+  ) {
+    Long commentId = commentModifiedRequest.getCommentId();
+    String comment = commentModifiedRequest.getComment();
+    String writer = commentModifiedRequest.getWriter();
+    boolean isModified = boardService.modifyComment(commentId, comment, writer);
+    return ResponseEntity.ok().body(isModified);
+  }
+
+  @DeleteMapping("/comment")
+  public ResponseEntity<Boolean> deleteComment(
+    @RequestParam("comment") Long commentId,
+    @RequestParam("user") String userId
+  ) {
+    boolean isDeleted = boardService.deleteComment(commentId, userId);
+    return ResponseEntity.ok().body(isDeleted);
   }
 
   @GetMapping("/comment/amount")
