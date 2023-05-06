@@ -56,7 +56,8 @@ public class BoardService {
     return null;
   }
 
-  public Boolean addContent(ContentRequest contentRequest) {
+  public Long addContent(ContentRequest contentRequest) {
+    Content savedContent;
     Content content = Content
       .builder()
       .title(contentRequest.getTitle())
@@ -71,32 +72,34 @@ public class BoardService {
       .author(contentRequest.getAuthor())
       .build();
     try {
-      contentRepo.save(content);
+      savedContent = contentRepo.save(content);
       contentMetaRepo.save(contentMeta);
     } catch (IllegalArgumentException e) {
       e.getStackTrace();
-      return false;
+      return -1l;
     } catch (OptimisticLockingFailureException e) {
       e.getStackTrace();
-      return false;
+      return -1l;
     }
-    return true;
+    return savedContent.getContentId();
   }
 
   @Transactional
-  public boolean modifyContent(
+  public Long modifyContent(
     Long contentId,
     String title,
     String contents,
     String author
   ) {
     if (isAuthorByContentId(contentId, author) == false) {
-      return false;
+      return -1l;
     }
+    Long modifiedContentId = -1l;
     Optional<Content> rowContent = contentRepo.findById(contentId);
     Optional<ContentMeta> rowContentMeta = contentMetaRepo.findById(contentId);
     if (rowContent.isPresent()) {
       Content content = rowContent.get();
+      modifiedContentId = content.getContentId();
       content.setContent(contents);
       content.setTitle(title);
     }
@@ -105,7 +108,7 @@ public class BoardService {
       contentMeta.setTitle(title);
       contentMeta.setUpdated(new Date());
     }
-    return true;
+    return modifiedContentId;
   }
 
   public Long getSizeByBoard(String board, String search) {

@@ -6,6 +6,7 @@ import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.content.ContentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.ContentRequest;
 import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
+import com.ikiningyou.cb.model.dto.content.ImageConfirmRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
@@ -86,24 +87,22 @@ public class BoardController {
   }
 
   @PostMapping("/edit")
-  public ResponseEntity<Boolean> saveContent(
-    @RequestBody ContentRequest content
-  ) {
-    Boolean isSaved = false;
+  public ResponseEntity<Long> saveContent(@RequestBody ContentRequest content) {
+    Long savedContentId = -1l;
     Boolean isBoardNameCorrect = false;
     Boolean isSuccessd = false;
 
     if (boardNameMap.isBoardName(content.getBoard())) {
       isBoardNameCorrect = true;
-      isSaved = boardService.addContent(content);
+      savedContentId = boardService.addContent(content);
     }
-    isSuccessd = isSaved && isBoardNameCorrect;
+    isSuccessd = savedContentId > 0l && isBoardNameCorrect;
 
-    return ResponseEntity.status(isSuccessd ? 200 : 400).body(isSuccessd);
+    return ResponseEntity.status(isSuccessd ? 200 : 400).body(savedContentId);
   }
 
   @PatchMapping("/modify")
-  public ResponseEntity<Boolean> modifyContent(
+  public ResponseEntity<Long> modifyContent(
     @RequestBody ContentModifiedRequest contentModifiedRequest
   ) {
     Long contentId = contentModifiedRequest.getContentId();
@@ -111,13 +110,15 @@ public class BoardController {
     String contents = contentModifiedRequest.getContents();
     String author = contentModifiedRequest.getAuthor();
 
-    boolean isModified = boardService.modifyContent(
+    Long modifiedContentId = boardService.modifyContent(
       contentId,
       title,
       contents,
       author
     );
-    return ResponseEntity.ok().body(isModified);
+    return ResponseEntity
+      .status(modifiedContentId > 0l ? 200 : 201)
+      .body(modifiedContentId);
   }
 
   @GetMapping("/content")
