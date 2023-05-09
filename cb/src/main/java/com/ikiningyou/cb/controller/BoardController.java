@@ -6,7 +6,6 @@ import com.ikiningyou.cb.model.dto.content.ContentMetaResponse;
 import com.ikiningyou.cb.model.dto.content.ContentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.ContentRequest;
 import com.ikiningyou.cb.model.dto.content.ContentShortResponse;
-import com.ikiningyou.cb.model.dto.content.ImageConfirmRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentModifiedRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
