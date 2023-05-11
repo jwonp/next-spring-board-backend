@@ -4,9 +4,6 @@ import com.ikiningyou.cb.model.Comment;
 import com.ikiningyou.cb.model.dto.content.comment.CommentRequest;
 import com.ikiningyou.cb.model.dto.content.comment.CommentResponse;
 import com.ikiningyou.cb.repository.CommentRepo;
-import com.ikiningyou.cb.repository.ContentMetaRepo;
-import com.ikiningyou.cb.repository.ContentRepo;
-import com.ikiningyou.cb.repository.LikeRepo;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,16 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
   @Autowired
-  private ContentRepo contentRepo;
-
-  @Autowired
-  private ContentMetaRepo contentMetaRepo;
-
-  @Autowired
   private CommentRepo commentRepo;
-
-  @Autowired
-  private LikeRepo likeRepo;
 
   public boolean isWriterByCommentId(Long commentId, String writer) {
     Long rowCommentCount = commentRepo.countByCommentIdAndWriter(

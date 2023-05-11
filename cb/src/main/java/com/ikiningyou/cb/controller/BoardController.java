@@ -77,4 +77,19 @@ public class BoardController {
     }
     return ResponseEntity.status(200).body(resultList);
   }
+
+  @GetMapping("likest")
+  public ResponseEntity<ContentMetaResponse[]> getMostLikedContents() {
+    return ResponseEntity.status(200).body(null);
+  }
+
+  @GetMapping("viewest")
+  public ResponseEntity<ContentMetaResponse[]> getMostViewedContents() {
+    return ResponseEntity.status(200).body(null);
+  }
+
+  @GetMapping("recent")
+  public ResponseEntity<ContentMetaResponse[]> getRecentlyContents() {
+    return ResponseEntity.status(200).body(null);
+  }
 }

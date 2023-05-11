@@ -2,9 +2,7 @@ package com.ikiningyou.cb.service;
 
 import com.ikiningyou.cb.model.ContentMeta;
 import com.ikiningyou.cb.model.Like;
-import com.ikiningyou.cb.repository.CommentRepo;
 import com.ikiningyou.cb.repository.ContentMetaRepo;
-import com.ikiningyou.cb.repository.ContentRepo;
 import com.ikiningyou.cb.repository.LikeRepo;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeService {
 
   @Autowired
-  private ContentRepo contentRepo;
-
-  @Autowired
   private ContentMetaRepo contentMetaRepo;
-
-  @Autowired
-  private CommentRepo commentRepo;
 
   @Autowired
   private LikeRepo likeRepo;
