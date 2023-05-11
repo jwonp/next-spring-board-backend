@@ -62,4 +62,40 @@ public class BoardService {
     }
     return null;
   }
+
+  public ContentMetaResponse[] getMostLikedContentMeta() {
+    Optional<List<ContentMetaResponse>> rowContentMetaList = contentMetaRepo.getMostLikedContentMeta();
+    if (rowContentMetaList.isPresent() == false) {
+      return null;
+    }
+    List<ContentMetaResponse> contentMetaList = rowContentMetaList.get();
+
+    return contentMetaList.toArray(
+      new ContentMetaResponse[contentMetaList.size()]
+    );
+  }
+
+  public ContentMetaResponse[] getMostViewedContentMeta() {
+    Optional<List<ContentMetaResponse>> rowContentMetaList = contentMetaRepo.getMostViewedContentMeta();
+    if (rowContentMetaList.isPresent() == false) {
+      return null;
+    }
+    List<ContentMetaResponse> contentMetaList = rowContentMetaList.get();
+
+    return contentMetaList.toArray(
+      new ContentMetaResponse[contentMetaList.size()]
+    );
+  }
+
+  public ContentMetaResponse[] getRecentlyContentMeta() {
+    Optional<List<ContentMetaResponse>> rowContentMetaList = contentMetaRepo.getRecentlyContentMeta();
+    if (rowContentMetaList.isPresent() == false) {
+      return null;
+    }
+    List<ContentMetaResponse> contentMetaList = rowContentMetaList.get();
+
+    return contentMetaList.toArray(
+      new ContentMetaResponse[contentMetaList.size()]
+    );
+  }
 }

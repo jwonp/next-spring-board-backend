@@ -80,16 +80,28 @@ public class BoardController {
 
   @GetMapping("likest")
   public ResponseEntity<ContentMetaResponse[]> getMostLikedContents() {
-    return ResponseEntity.status(200).body(null);
+    ContentMetaResponse[] contentMetaList = boardService.getMostLikedContentMeta();
+    if (contentMetaList == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.status(200).body(contentMetaList);
   }
 
   @GetMapping("viewest")
   public ResponseEntity<ContentMetaResponse[]> getMostViewedContents() {
-    return ResponseEntity.status(200).body(null);
+    ContentMetaResponse[] contentMetaList = boardService.getMostViewedContentMeta();
+    if (contentMetaList == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.status(200).body(contentMetaList);
   }
 
   @GetMapping("recent")
   public ResponseEntity<ContentMetaResponse[]> getRecentlyContents() {
-    return ResponseEntity.status(200).body(null);
+    ContentMetaResponse[] contentMetaList = boardService.getRecentlyContentMeta();
+    if (contentMetaList == null) {
+      return ResponseEntity.status(201).body(null);
+    }
+    return ResponseEntity.status(200).body(contentMetaList);
   }
 }
