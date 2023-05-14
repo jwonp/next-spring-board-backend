@@ -57,8 +57,8 @@ public class ContentController {
     @RequestParam("content") Long contentId,
     @RequestParam("user") String userId
   ) {
-    contentService.deleteContent(contentId, userId);
-    return ResponseEntity.status(200).body(null);
+    boolean isDeleted = contentService.deleteContent(contentId, userId);
+    return ResponseEntity.status(isDeleted ? 200 : 201).body(null);
   }
 
   @GetMapping("/author")
