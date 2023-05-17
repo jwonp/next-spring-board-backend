@@ -19,5 +19,5 @@ public interface ContentFullData {
 
   public int getLikes();
 
-  public Date getUpdated();
+  public String getCreated();
 }
