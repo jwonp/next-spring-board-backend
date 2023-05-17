@@ -26,7 +26,7 @@ public interface ContentRepo extends JpaRepository<Content, Long> {
     "C.name as author, " +
     "B.views as views, " +
     "B.likes as likes, " +
-    "B.updated as updated " +
+    "B.created as created " +
     "FROM Content A " +
     "LEFT JOIN ContentMeta B " +
     "ON A.contentId = B.contentMetaId " +
