@@ -31,6 +31,9 @@ public class BoardController {
     @RequestParam("board") String board,
     @RequestParam("index") int index
   ) {
+    if (boardNameMap.isBoardName(board) == false) {
+      return ResponseEntity.status(400).body(null);
+    }
     ContentMetaResponse[] contentMetaList = boardService.getContentListByBoard(
       board,
       index
@@ -48,8 +51,9 @@ public class BoardController {
     @RequestParam("board") String board,
     @RequestParam(required = false, value = "search") String search
   ) {
+    log.info("{} is board name ? {}", board, boardNameMap.isBoardName(board));
     if (boardNameMap.isBoardName(board) == false) {
-      return ResponseEntity.status(201).body(-1);
+      return ResponseEntity.status(400).body(-1);
     }
     Long size = boardService.getSizeByBoard(board, search);
     int intSize = Long.valueOf(Optional.ofNullable(size).orElse(0L)).intValue();
@@ -63,6 +67,9 @@ public class BoardController {
     @RequestParam("board") String board,
     @RequestParam(value = "index", required = false) Optional<Integer> index
   ) {
+    if (boardNameMap.isBoardName(board) == false) {
+      return ResponseEntity.status(400).body(null);
+    }
     int pageableIndex = 0;
     if (index.isPresent()) {
       pageableIndex = index.get();
@@ -73,7 +80,7 @@ public class BoardController {
       pageableIndex
     );
     if (resultList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
     return ResponseEntity.status(200).body(resultList);
   }
@@ -82,7 +89,7 @@ public class BoardController {
   public ResponseEntity<ContentMetaResponse[]> getMostLikedContents() {
     ContentMetaResponse[] contentMetaList = boardService.getMostLikedContentMeta();
     if (contentMetaList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
     return ResponseEntity.status(200).body(contentMetaList);
   }
@@ -91,7 +98,7 @@ public class BoardController {
   public ResponseEntity<ContentMetaResponse[]> getMostViewedContents() {
     ContentMetaResponse[] contentMetaList = boardService.getMostViewedContentMeta();
     if (contentMetaList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
     return ResponseEntity.status(200).body(contentMetaList);
   }
@@ -100,7 +107,7 @@ public class BoardController {
   public ResponseEntity<ContentMetaResponse[]> getRecentlyContents() {
     ContentMetaResponse[] contentMetaList = boardService.getRecentlyContentMeta();
     if (contentMetaList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
     return ResponseEntity.status(200).body(contentMetaList);
   }
