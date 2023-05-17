@@ -36,8 +36,9 @@ public class ContentController {
   ) {
     ContentFullData content = contentService.getContentById(id);
     if (content == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
+
     return ResponseEntity.ok().body(content);
   }
 
@@ -48,7 +49,9 @@ public class ContentController {
     ContentShortResponse contentShort = contentService.getContentShortByContentId(
       contentId
     );
-    if (contentShort == null) return ResponseEntity.status(201).body(null);
+    if (contentShort == null) {
+      return ResponseEntity.status(400).body(null);
+    }
     return ResponseEntity.status(200).body(contentShort);
   }
 
@@ -58,7 +61,10 @@ public class ContentController {
     @RequestParam("user") String userId
   ) {
     boolean isDeleted = contentService.deleteContent(contentId, userId);
-    return ResponseEntity.status(isDeleted ? 200 : 201).body(null);
+    if (isDeleted == false) {
+      return ResponseEntity.status(400).body(false);
+    }
+    return ResponseEntity.status(200).body(true);
   }
 
   @GetMapping("/author")
@@ -81,8 +87,10 @@ public class ContentController {
       savedContentId = contentService.addContent(content);
     }
     isSuccessd = savedContentId > 0l && isBoardNameCorrect;
-
-    return ResponseEntity.status(isSuccessd ? 200 : 400).body(savedContentId);
+    if (isSuccessd == false) {
+      return ResponseEntity.status(400).body(null);
+    }
+    return ResponseEntity.status(200).body(savedContentId);
   }
 
   @PatchMapping("/modify")
@@ -100,8 +108,9 @@ public class ContentController {
       contents,
       author
     );
-    return ResponseEntity
-      .status(modifiedContentId > 0l ? 200 : 201)
-      .body(modifiedContentId);
+    if (modifiedContentId <= 0l) {
+      return ResponseEntity.status(400).body(null);
+    }
+    return ResponseEntity.status(200).body(modifiedContentId);
   }
 }

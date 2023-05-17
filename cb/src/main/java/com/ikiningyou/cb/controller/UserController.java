@@ -33,16 +33,22 @@ public class UserController {
     Object o = request.getAttribute("_csrf");
     CsrfToken token = (CsrfToken) o;
     String CsrfToken = token.getToken();
+
     boolean isUserRegisted = userService.isUserRegisted(id, provider);
     log.info("registed CsrfToken : {}, id: {}", CsrfToken, id);
-    return ResponseEntity.status(isUserRegisted ? 201 : 200).body(CsrfToken);
+
+    return ResponseEntity.status(200).body(isUserRegisted ? CsrfToken : null);
   }
 
   @PostMapping("/register")
   public ResponseEntity<Boolean> addUser(@RequestBody UserRequest userRequest) {
     log.info("regist {}", userRequest.getName());
+    short statusCode = 200;
     Boolean isSaved = userService.addUser(userRequest);
-    int statusCode = isSaved ? 200 : 201;
+    if (isSaved == false) {
+      statusCode = 400;
+    }
+    log.info("statusCode {} isSaved {}", statusCode, isSaved);
 
     return ResponseEntity.status(statusCode).body(isSaved);
   }
