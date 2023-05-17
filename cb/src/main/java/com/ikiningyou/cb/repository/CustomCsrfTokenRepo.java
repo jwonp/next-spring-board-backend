@@ -33,7 +33,7 @@ public class CustomCsrfTokenRepo implements CsrfTokenRepository {
     log.info("saveToken");
 
     String identifier = request.getHeader("X-IDENTIFIER");
-
+    if (identifier == null) return;
     log.info("identifier is {}", identifier);
     Optional<Token> existingToken = jpaTokenRepo.findTokenByIdentifier(
       identifier
