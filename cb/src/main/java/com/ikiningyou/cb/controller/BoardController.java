@@ -40,7 +40,7 @@ public class BoardController {
     );
 
     if (contentMetaList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
 
     return ResponseEntity.ok().body(contentMetaList);
