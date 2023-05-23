@@ -16,3 +16,6 @@ deprecated/
 cb/bin/main/com/ikiningyou/cb/
 
 .vscode/
+cb/src/main/resources/application-local.yaml
+.gitignore
+cb/src/main/resources/application-prod.yaml
