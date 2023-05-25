@@ -1,4 +1,4 @@
-package com.ikiningyou.cb.model;
+package com.ikiningyou.cb;
 
 import com.ikiningyou.cb.service.BoardService;
 import java.io.UnsupportedEncodingException;
