@@ -1,7 +1,9 @@
 package com.ikiningyou.cb.config;
 
 import com.ikiningyou.cb.repository.CustomCsrfTokenRepo;
+import com.ikiningyou.cb.util.property.Endpoints;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class WebConfig {
+
+  @Autowired
+  Endpoints endpoints;
 
   @Bean
   public CsrfTokenRepository customTokenRepository() {
@@ -39,7 +44,7 @@ public class WebConfig {
       .cors(c -> {
         CorsConfigurationSource source = request -> {
           CorsConfiguration config = new CorsConfiguration();
-          config.setAllowedOrigins(List.of("http://localhost:3000"));
+          config.setAllowedOrigins(List.of(endpoints.getFrontend()));
           config.setAllowedMethods(
             List.of("GET", "POST", "PUT", "PATCH", "DELETE")
           );
