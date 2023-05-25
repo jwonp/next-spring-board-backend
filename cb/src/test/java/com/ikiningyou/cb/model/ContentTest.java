@@ -12,4 +12,7 @@ public class ContentTest {
 
   @Autowired
   private BoardService boardService;
+
+  @Test
+  void testContent() {}
 }
