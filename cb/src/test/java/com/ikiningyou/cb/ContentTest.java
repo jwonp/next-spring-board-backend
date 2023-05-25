@@ -10,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ContentTest {
 
-  @Autowired
-  private BoardService boardService;
-
   @Test
   void testContent() {}
 }
