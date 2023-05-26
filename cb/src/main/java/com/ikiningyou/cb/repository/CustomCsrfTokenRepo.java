@@ -53,6 +53,7 @@ public class CustomCsrfTokenRepo implements CsrfTokenRepository {
   public CsrfToken loadToken(HttpServletRequest request) {
     log.info("loadToken");
     String identifier = request.getHeader("X-IDENTIFIER");
+    if (identifier == null) return null;
     Optional<Token> existingToken = jpaTokenRepo.findTokenByIdentifier(
       identifier
     );
