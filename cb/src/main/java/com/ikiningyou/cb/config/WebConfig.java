@@ -3,6 +3,7 @@ package com.ikiningyou.cb.config;
 import com.ikiningyou.cb.repository.CustomCsrfTokenRepo;
 import com.ikiningyou.cb.util.property.Endpoints;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class WebConfig {
@@ -44,6 +46,7 @@ public class WebConfig {
       .cors(c -> {
         CorsConfigurationSource source = request -> {
           CorsConfiguration config = new CorsConfiguration();
+          log.info("endpoint is {}", endpoints.getFrontend());
           config.setAllowedOrigins(List.of(endpoints.getFrontend()));
           config.setAllowedMethods(
             List.of("GET", "POST", "PUT", "PATCH", "DELETE")
