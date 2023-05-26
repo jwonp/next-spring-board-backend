@@ -28,7 +28,7 @@ public class CommentController {
   ) {
     CommentResponse[] commentList = commentService.getCommnetByContentId(id);
     if (commentList == null) {
-      return ResponseEntity.status(201).body(null);
+      return ResponseEntity.status(400).body(null);
     }
     return ResponseEntity.ok().body(commentList);
   }
@@ -38,7 +38,7 @@ public class CommentController {
     @RequestBody CommentRequest comment
   ) {
     boolean isSaved = commentService.addCommentByContentId(comment);
-    return ResponseEntity.status(isSaved ? 200 : 201).body(isSaved);
+    return ResponseEntity.status(isSaved ? 200 : 400).body(isSaved);
   }
 
   @PatchMapping
