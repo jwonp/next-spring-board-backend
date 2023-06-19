@@ -40,7 +40,7 @@ public class WebConfig {
       .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
       .httpBasic(c -> c.disable())
       .csrf(c -> {
-        c.ignoringRequestMatchers("/user/register");
+        c.ignoringRequestMatchers("/user/register", "/user/registed");
         c.csrfTokenRepository(customTokenRepository());
       })
       .cors(c -> {
