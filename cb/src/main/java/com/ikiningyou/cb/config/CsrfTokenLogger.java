@@ -20,7 +20,14 @@ public class CsrfTokenLogger implements Filter {
     ServletResponse response,
     FilterChain chain
   ) throws IOException, ServletException {
+    try {
+      log.info("X-IDENTIFIER {}", request.getAttribute("X-IDENTIFIER"));
+    } catch (Exception e) {
+      log.info("NO X-IDENTIFIER");
+    }
+
     Object o = request.getAttribute("_csrf");
+    request.getRemoteHost();
     CsrfToken token = (CsrfToken) o;
     try {
       log.info("CsrfTokenLogger CSRF token : {}", token.getToken());
