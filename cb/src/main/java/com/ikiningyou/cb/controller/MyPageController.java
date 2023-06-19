@@ -36,7 +36,7 @@ public class MyPageController {
     @RequestParam("user") String userId,
     @RequestParam(required = false, value = "index") String index
   ) {
-    ContentMetaResponse[] writtenContents = myPageService.getLikedContents(
+    ContentMetaResponse[] writtenContents = myPageService.getWrittenContents(
       userId,
       index
     );
