@@ -33,27 +33,26 @@ public interface MyPageRepo extends JpaRepository<ContentMeta, Long> {
     @Param("userId") String userId,
     Pageable pageable
   );
-  //   @Query(
-  //     "SELECT " +
-  //     "A.contentMetaId as contentMetaId, " +
-  //     "A.title as title, " +
-  //     "B.name as author, " +
-  //     "A.board as board, " +
-  //     "A.created as created, " +
-  //     "A.updated as updated, " +
-  //     "A.views as views, " +
-  //     "A.likes as likes " +
-  //     "FROM ContentMeta A " +
-  //     "LEFT JOIN User B " +
-  //     "ON A.author = B.id " +
-  //     "LEFT JOIN Like C " +
-  //     "ON A.contentMetaId = C.contentId" +
-  //     "WHERE C.userId = :userId" +
-  //     "ORDER BY A.contentMetaId DESC " +
-  //     "LIMIT 10"
-  //   )
-  //   Optional<List<ContentMetaResponse>> getWrittenContents(
-  //     @Param("userId") String userId,
-  //     Pageable pageable
-  //   );
+
+  @Query(
+    "SELECT " +
+    "A.contentMetaId as contentMetaId, " +
+    "A.title as title, " +
+    "B.name as author, " +
+    "A.board as board, " +
+    "A.created as created, " +
+    "A.updated as updated, " +
+    "A.views as views, " +
+    "A.likes as likes " +
+    "FROM ContentMeta A " +
+    "LEFT JOIN User B " +
+    "ON A.author = B.id " +
+    "WHERE A.author = :userId " +
+    "ORDER BY A.contentMetaId DESC " +
+    "LIMIT 10"
+  )
+  Optional<List<ContentMetaResponse>> getWrittenContents(
+    @Param("userId") String userId,
+    Pageable pageable
+  );
 }
