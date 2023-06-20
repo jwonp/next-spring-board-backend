@@ -37,7 +37,7 @@ public class WebConfig {
       //   new AuthenticationLogginFilter(),
       //   BasicAuthenticationFilter.class
       // )
-      // .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
+      .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
       .httpBasic(c -> c.disable())
       .csrf(c -> {
         c.ignoringRequestMatchers(
@@ -52,6 +52,7 @@ public class WebConfig {
       .cors(c -> {
         CorsConfigurationSource source = request -> {
           CorsConfiguration config = new CorsConfiguration();
+          
           log.info("endpoint is {}", endpoints.getFrontend());
           config.setAllowedOrigins(List.of(endpoints.getFrontend()));
           config.setAllowedMethods(
