@@ -37,10 +37,16 @@ public class WebConfig {
       //   new AuthenticationLogginFilter(),
       //   BasicAuthenticationFilter.class
       // )
-      .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
+      // .addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class)
       .httpBasic(c -> c.disable())
       .csrf(c -> {
-        c.ignoringRequestMatchers("/user/register", "/user/registed", "/board/likest", "/board/viewest","/board/recent");
+        c.ignoringRequestMatchers(
+          "/user/register",
+          "/user/registed",
+          "/board/likest",
+          "/board/viewest",
+          "/board/recent"
+        );
         c.csrfTokenRepository(customTokenRepository());
       })
       .cors(c -> {
